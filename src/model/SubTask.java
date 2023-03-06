@@ -1,7 +1,7 @@
 package model;
 
 public class SubTask extends Task{
-    Epic epic;
+    protected Epic epic;
 
     public SubTask(String name, String description) {
         super(name, description);
@@ -20,10 +20,10 @@ public class SubTask extends Task{
     @Override
     public String toString() {
         return "SubTask{" +
-                "id='" + getId() + '\'' +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status='" + getStatus() + '\'' +
+                "id='" + this.id + '\'' +
+                ", name='" + this.name + '\'' +
+                ", description='" + this.description + '\'' +
+                ", status='" + this.status + '\'' +
                 ", epic=" + epic +
                 '}';
     }

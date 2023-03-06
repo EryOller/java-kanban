@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TaskManager {
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, SubTask> subTasks =  new HashMap<>();
+    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private HashMap<Integer, SubTask> subTasks =  new HashMap<>();
     static int sequence = 0;
 
     public Task createTask(Task task) {
@@ -41,27 +41,21 @@ public class TaskManager {
     public List<Task> getListAllTask() {
         ArrayList<Task> listTask = new ArrayList<>();
 
-        for (Task task: tasks.values()) {
-            listTask.add(task);
-        }
+        listTask.addAll(tasks.values());
         return listTask;
     }
 
     public List<SubTask> getListAllSubTask() {
         ArrayList<SubTask> listSubTask = new ArrayList<>();
 
-        for (SubTask subTask: subTasks.values()) {
-            listSubTask.add(subTask);
-        }
+        listSubTask.addAll(subTasks.values());
         return listSubTask;
     }
 
     public List<Epic> getListAllEpic() {
         ArrayList<Epic> listEpic = new ArrayList<>();
 
-        for (Epic epic: epics.values()) {
-            listEpic.add(epic);
-        }
+        listEpic.addAll(epics.values());
         return listEpic;
     }
 
@@ -72,27 +66,15 @@ public class TaskManager {
     }
 
     public Task getTaskById(int id) {
-        if (tasks.containsKey(id)) {
-            return tasks.get(id);
-        } else {
-            return null;
-        }
+        return tasks.getOrDefault(id, null);
     }
 
     public Epic getEpicById(int id) {
-        if (epics.containsKey(id)) {
-            return epics.get(id);
-        } else {
-            return null;
-        }
+        return epics.getOrDefault(id, null);
     }
 
     public SubTask getSubTaskById(int id) {
-        if (subTasks.containsKey(id)) {
-            return subTasks.get(id);
-        } else {
-            return null;
-        }
+        return subTasks.getOrDefault(id, null);
     }
 
     public void updateTask(int id, Task task) {
@@ -144,8 +126,6 @@ public class TaskManager {
     }
 
     public void deleteTaskById(int id) {
-        if (tasks.containsKey(id)) {
-            tasks.remove(id);
-        }
+        tasks.remove(id);
     }
 }

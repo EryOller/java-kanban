@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Epic extends Task{
 
-    ArrayList<SubTask> insideSubTasks = new ArrayList<>();
+    protected ArrayList<SubTask> insideSubTasks = new ArrayList<>();
 
     public Epic(String name, String description) {
         super(name, description);
@@ -23,11 +23,11 @@ public class Epic extends Task{
 
     public void calculateEpicStatus() {
         int countFinishedSubTask = 0;
-        for (int i = 0; i < insideSubTasks.size(); i++) {
-            if (insideSubTasks.get(i).getStatus().equals(IN_PROGRESS_STATUS) ||
-                    insideSubTasks.get(i).getStatus().equals(DONE_STATUS)) {
+        for (SubTask insideSubTask : insideSubTasks) {
+            if (insideSubTask.getStatus().equals(IN_PROGRESS_STATUS) ||
+                    insideSubTask.getStatus().equals(DONE_STATUS)) {
                 setStatus(IN_PROGRESS_STATUS);
-                if(insideSubTasks.get(i).getStatus().equals(DONE_STATUS)) {
+                if(insideSubTask.getStatus().equals(DONE_STATUS)) {
                     countFinishedSubTask++;
                 } else {
                     return;
@@ -51,10 +51,10 @@ public class Epic extends Task{
     @Override
     public String toString() {
         return "Epic{" +
-                "id='" + getId() + '\'' +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status='" + getStatus() + '\'' +
+                "id='" + this.id + '\'' +
+                ", name='" + this.name + '\'' +
+                ", description='" + this.description+ '\'' +
+                ", status='" + this.status + '\'' +
                 ", numberSubTasks='" + getSubTasks().size() + '\'' +
                 ", subTasks=" + getStringSubTasks() +
                 '}';

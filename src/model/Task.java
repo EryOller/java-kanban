@@ -1,10 +1,10 @@
 package model;
 
 public class Task {
-    private String name;
-    private String description;
-    private int id;
-    private String status;
+    protected String name;
+    protected String description;
+    protected int id;
+    protected String status;
     private final String NEW_STATUS = "NEW";
     public final String IN_PROGRESS_STATUS = "IN_PROGRESS";
     public final String DONE_STATUS = "DONE";
