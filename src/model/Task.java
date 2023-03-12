@@ -4,15 +4,12 @@ public class Task {
     protected String name;
     protected String description;
     protected int id;
-    protected String status;
-    private final String NEW_STATUS = "NEW";
-    public final String IN_PROGRESS_STATUS = "IN_PROGRESS";
-    public final String DONE_STATUS = "DONE";
+    protected Status status;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.status = NEW_STATUS;
+        this.status = Status.NEW;
     }
 
     public String getName() {
@@ -39,11 +36,11 @@ public class Task {
         this.id = id;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return this.status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

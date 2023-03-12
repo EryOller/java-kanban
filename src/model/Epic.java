@@ -24,10 +24,10 @@ public class Epic extends Task{
     public void calculateEpicStatus() {
         int countFinishedSubTask = 0;
         for (SubTask insideSubTask : insideSubTasks) {
-            if (insideSubTask.getStatus().equals(IN_PROGRESS_STATUS) ||
-                    insideSubTask.getStatus().equals(DONE_STATUS)) {
-                setStatus(IN_PROGRESS_STATUS);
-                if(insideSubTask.getStatus().equals(DONE_STATUS)) {
+            if (insideSubTask.getStatus().equals(Status.IN_PROGRESS) ||
+                    insideSubTask.getStatus().equals(Status.DONE)) {
+                setStatus(Status.IN_PROGRESS);
+                if(insideSubTask.getStatus().equals(Status.DONE)) {
                     countFinishedSubTask++;
                 } else {
                     return;
@@ -35,7 +35,7 @@ public class Epic extends Task{
             }
         }
         if (countFinishedSubTask == insideSubTasks.size()) {
-            setStatus(DONE_STATUS);
+            setStatus(Status.DONE);
         }
     }
 
