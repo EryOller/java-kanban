@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface HistoryManager {
 
-    void add(Task task); // должен помечать задачи как просмотренные
+    void add(Task task);
 
-    List<Task> getHistory(); // должен возвращать список задач
+    List<Task> getHistory();
 
 }
