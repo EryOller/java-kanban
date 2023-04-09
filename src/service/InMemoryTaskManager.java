@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static service.InMemoryHistoryManager.clearHistory;
+
 public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
@@ -62,6 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics.clear();
         tasks.clear();
         subTasks.clear();
+        clearHistory();
     }
 
     @Override
@@ -126,6 +129,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             subTasks.remove(id);
+            new InMemoryHistoryManager().remove(id);
             currentEpic.calculateEpicStatus();
         }
     }
@@ -135,14 +139,17 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(id)) {
             for (SubTask subTask : epics.get(id).getSubTasks()) {
                 subTasks.remove(subTask.getId());
+                new InMemoryHistoryManager().remove(subTask.getId());
             }
             epics.remove(id);
+            new InMemoryHistoryManager().remove(id);
         }
     }
 
     @Override
     public void deleteTaskById(int id) {
         tasks.remove(id);
+        new InMemoryHistoryManager().remove(id);
     }
 
     private void saveTaskInHistory(Task task) {
