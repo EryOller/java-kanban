@@ -1,8 +1,10 @@
 package service;
 
+import dao.TaskRepository;
 import model.Epic;
 import model.SubTask;
 import model.Task;
+import model.TaskData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +12,7 @@ import java.util.List;
 
 import static service.InMemoryHistoryManager.clearHistory;
 
-public class InMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager, TaskRepository {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, SubTask> subTasks =  new HashMap<>();
@@ -158,5 +160,60 @@ public class InMemoryTaskManager implements TaskManager {
 
     private List<Task> getListHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public TaskData load() { // загрузить в файла
+        List<Task> tasks = new ArrayList<>();
+        tasks.addAll(this.tasks.values());
+        tasks.addAll(this.epics.values());
+        tasks.addAll(this.subTasks.values());
+
+        List<Integer> history = new ArrayList<>();
+        for (Task task : getListHistory()) {
+            history.add(task.getId());
+        }
+        TaskData taskData = new TaskData(tasks, history);
+
+        return taskData;
+    }
+
+    @Override
+    public void save(TaskData taskData) { // сохранить из файл
+        try {
+            for (Task task : taskData.getTasks()) {
+                switch (task.getType()) {
+                    case TASK : {
+                        tasks.put(task.getId(), task);
+                        break;
+                    }
+                    case EPIC: {
+                        epics.put(task.getId(), (Epic) task);
+                        break;
+                    }
+                    case SUBTASK: {
+                        subTasks.put(task.getId(), (SubTask) task);
+                        break;
+                    }
+                    default: {
+                        throw new Exception("Не удалось определить тип файла");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        sequence = taskData.getTasks().stream().max(new TaskComparator()).get().getId();
+
+        for (int id : taskData.getHistory()) {
+            if (tasks.get(id) != null) {
+                getListHistory().add(tasks.get(id));
+            } else if (epics.get(id) != null) {
+                getListHistory().add(epics.get(id));
+            } else if (subTasks.get(id) != null) {
+                getListHistory().add(subTasks.get(id));
+            }
+        }
     }
 }

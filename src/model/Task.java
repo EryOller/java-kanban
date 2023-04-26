@@ -7,6 +7,7 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
+    private final TaskType type = TaskType.TASK;
 
     public Task(String name, String description) {
         this.name = name;
@@ -46,6 +47,10 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getType() {
+        return type;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -61,11 +66,11 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(name, task.name);
+        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, id);
+        return Objects.hash(name, description, id);
     }
 }
