@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class ManagerSaveException extends IOException {
 
-    public ManagerSaveException(Exception exception) {
-        super("Не удалось прочитать файл. ", exception);
+    public ManagerSaveException(String message, Exception exception) {
+        super(message, exception);
     }
 }

@@ -28,7 +28,7 @@ public class CSVTaskRepository implements TaskRepository {
         try {
             lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new ManagerSaveException(e);
+            throw new ManagerSaveException("Can't read form file: " + file.getName(), e);
         }
 
         List<Integer> history = new ArrayList<>();
@@ -119,7 +119,7 @@ public class CSVTaskRepository implements TaskRepository {
                 }
             }
         } catch (IOException e) {
-            throw new ManagerSaveException(e);
+            throw new ManagerSaveException("Can't read form file: " + file.getName(), e);
         }
     }
 
