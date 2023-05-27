@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -8,11 +9,19 @@ public class Task {
     protected int id;
     protected Status status;
     private final TaskType type = TaskType.TASK;
+    private LocalDateTime startTime;
+    private int duration;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+    }
+
+    public Task(String name, String description, LocalDateTime startTime, int duration) {
+        this(name, description);
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public String getName() {
@@ -51,6 +60,28 @@ public class Task {
         return type;
     }
 
+    public LocalDateTime getEndTime() {
+        LocalDateTime endTime = getStartTime();
+        endTime = endTime.plusMinutes(getDuration());
+        return endTime;
+    }
+
+    public int getDuration() {
+        return  this.duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return this.startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+     }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -58,6 +89,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id='" + id + '\'' +
                 ", status='" + status + '\'' +
+                ", startTime='" + this.getStartTime() +'\'' +
+                ", duration='" + this.getDuration() + '\'' +
+                ", endTime='" + this.getEndTime() + '\'' +
                 '}';
     }
 
@@ -73,4 +107,5 @@ public class Task {
     public int hashCode() {
         return Objects.hash(name, description, id);
     }
+
 }

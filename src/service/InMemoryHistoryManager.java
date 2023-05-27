@@ -52,8 +52,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        Node<Task> node = listHistory.remove(id);
-        removeNode(node);
+        if (listHistory.containsKey(id)) {
+            Node<Task> node = listHistory.remove(id);
+            removeNode(node);
+        }
     }
 
     @Override
@@ -70,5 +72,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public static void clearHistory() {
         listHistory.clear();
+        head = null;
+        tail = null;
     }
 }

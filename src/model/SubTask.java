@@ -1,11 +1,17 @@
 package model;
 
+import java.time.LocalDateTime;
+
 public class SubTask extends Task{
     protected Epic epic;
     private final TaskType type = TaskType.SUBTASK;
 
     public SubTask(String name, String description) {
         super(name, description);
+    }
+
+    public SubTask(String name, String description, LocalDateTime startDate, int duration) {
+        super(name, description, startDate, duration);
     }
 
     public Epic getEpic() {
@@ -25,6 +31,9 @@ public class SubTask extends Task{
                 ", name='" + this.name + '\'' +
                 ", description='" + this.description + '\'' +
                 ", status='" + this.status + '\'' +
+                ", startTime='" + this.getStartTime() +'\'' +
+                ", duration='" + this.getDuration() + '\'' +
+                ", endTime='" + this.getEndTime() + '\'' +
                 ", epic=" + epic +
                 '}';
     }

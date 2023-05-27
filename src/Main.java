@@ -4,6 +4,8 @@ import model.SubTask;
 import model.Task;
 import service.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class Main {
@@ -12,6 +14,9 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
 
+//        taskManager.createTask(new Task("Test", "test", LocalDateTime.of(2022,1, 1, 10, 30), 100));
+//        System.out.println("Task: " + taskManager.getTaskById(1));
+
         System.out.println("Создание двух задач:");
         System.out.println("Создание эпика с тремя подзадачами");
         taskManager.createEpic(new Epic("Закончить Яндекс-Практикум", "Дойти до конца! Путь самурая!"));
@@ -19,17 +24,24 @@ public class Main {
         printHistory(historyManager.getHistory());
         System.out.println();
         taskManager.createSubTask(new SubTask("Закрыть спринт 1",
-                "Спринт необходимо закрыть до 01.02.23"), taskManager.getEpicById(1));
+                "Спринт необходимо закрыть до 01.02.23",
+                LocalDateTime.of(2023,1,1,16,10), 100),
+                taskManager.getEpicById(1));
         System.out.println("Create subTask: " + taskManager.getSubTaskById(2));
         printHistory(historyManager.getHistory());
         System.out.println();
         taskManager.createSubTask(new SubTask("Закрыть спринт 2",
-                "Спринт необходимо закрыть до 15.02.23"), taskManager.getEpicById(1));
+                "Спринт необходимо закрыть до 15.02.23",
+                LocalDateTime.of(2023,1,1,11,10), 100),
+                taskManager.getEpicById(1));
         System.out.println("Create subTask: " + taskManager.getSubTaskById(3));
+
         printHistory(historyManager.getHistory());
         System.out.println();
         taskManager.createSubTask(new SubTask("Закрыть спринт 3",
-                "Спринт необходимо закрыть до 20.02.23"), taskManager.getEpicById(1));
+                "Спринт необходимо закрыть до 20.02.23",
+                LocalDateTime.of(2023,1,1,8,10), 100),
+                taskManager.getEpicById(1));
         System.out.println("Create subTask: " + taskManager.getSubTaskById(4));
         printHistory(historyManager.getHistory());
         System.out.println();
@@ -69,5 +81,7 @@ public class Main {
         for (int i = history.size() - 1; i >= 0; i--) {
             System.out.println(history.get(i));
         }
+        Date date = new Date();
+        //date.
     }
 }

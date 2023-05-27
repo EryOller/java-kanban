@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class CSVTaskRepository implements TaskRepository {
     private File file;
     private List<Epic> epics = new ArrayList<>();
-    private final static String HEADER_FILE = "id,type,name,status,description,epic\n";
+    private final static String HEADER_FILE = "id,type,name,status,description,epic,startTime,duration\n";
 
     public CSVTaskRepository(File file) {
         this.file = file;
@@ -56,7 +57,7 @@ public class CSVTaskRepository implements TaskRepository {
     private Task parseTask(String line) {
         String[] propertyTask = line.split(",");
         if (TaskType.TASK.toString().equals(propertyTask[1])) {
-            Task task = new Task(propertyTask[2], propertyTask[4]);
+            Task task = new Task(propertyTask[2], propertyTask[4], LocalDateTime.parse(propertyTask[5]), Integer.parseInt(propertyTask[6]));
             task.setId(Integer.parseInt(propertyTask[0]));
             task.setStatus(parseStatus(propertyTask[3]));
             return task;
@@ -67,7 +68,7 @@ public class CSVTaskRepository implements TaskRepository {
             epics.add(epic);
             return epic;
         } else if (TaskType.SUBTASK.toString().equals(propertyTask[1])) {
-            SubTask subTask = new SubTask(propertyTask[2], propertyTask[4]);
+            SubTask subTask = new SubTask(propertyTask[2], propertyTask[4], LocalDateTime.parse(propertyTask[5]), Integer.parseInt(propertyTask[6]));
             subTask.setId(Integer.parseInt(propertyTask[0]));
             subTask.setStatus(parseStatus(propertyTask[3]));
             subTask.setEpic(findEpic(propertyTask[5]));
@@ -133,6 +134,7 @@ public class CSVTaskRepository implements TaskRepository {
         } else {
             line.append("null");
         }
+        line.append("," + task.getStartTime() + "," + task.getDuration());
         return line.toString();
     }
 }
