@@ -1,23 +1,26 @@
 import model.Epic;
 import model.Task;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import service.FileBackedTaskManager;
 import service.Managers;
+
+import java.io.File;
 
 public class FileBackedTaskManagerTest extends TaskManagersTest{
 
     static FileBackedTaskManager fileBackedTaskManager;
+    static int count = 1;
 
-    @BeforeAll
-    public static void createTaskManager() {
-        taskManager = Managers.getFileBackedTaskManager("./resources/task.csv");
+    @BeforeEach
+    public void createTaskManagerWithFile() {
+        taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
         fileBackedTaskManager = (FileBackedTaskManager) taskManager;
     }
 
     @Test
-    public void checkSaveInFileEmptyListTasksAndEmptyListHistory() { // dima проблема в том что не пробрасываются исклдючения и тест всегда выполняется
+    public void checkSaveInFileEmptyListTasksAndEmptyListHistory() {
+        taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
+        fileBackedTaskManager = (FileBackedTaskManager) taskManager;
         try {
             Assertions.assertEquals(0, fileBackedTaskManager.getListAllTask().size());
             Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.load());
@@ -27,17 +30,20 @@ public class FileBackedTaskManagerTest extends TaskManagersTest{
     }
 
     @Test
-    public void checkRecoveryFromEmptyFileAndEmptyListHistory() { // dima проблема в том что не пробрасываются исклдючения и тест всегда выполняется
+    public void checkRecoveryFromEmptyFileAndEmptyListHistory() {
+        taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
+        fileBackedTaskManager = (FileBackedTaskManager) taskManager;
         try {
             Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
         } finally {
             fileBackedTaskManager.deleteAllTasks();
         }
-
     }
 
     @Test
     public void checkSaveEpicWithoutSubTaskInFile() {
+        taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
+        fileBackedTaskManager = (FileBackedTaskManager) taskManager;
         try {
             fileBackedTaskManager.createTask(new Epic("Test-Name", "Test-Description"));
             Assertions.assertEquals(1, fileBackedTaskManager.getListAllTask().size());
@@ -70,5 +76,13 @@ public class FileBackedTaskManagerTest extends TaskManagersTest{
         } finally {
             fileBackedTaskManager.deleteAllTasks();
         }
+    }
+
+    @AfterEach
+    public void deleteFile() {
+        new File("./test/resources/" + count++ + "task.csv").delete();
+        fileBackedTaskManager = null;
+        taskManager = null;
+
     }
 }

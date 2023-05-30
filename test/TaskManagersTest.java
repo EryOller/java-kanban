@@ -3,10 +3,7 @@ import model.Status;
 import model.SubTask;
 import model.Task;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import service.InMemoryTaskManager;
-import service.Managers;
 import service.TaskManager;
 
 import java.time.LocalDateTime;
@@ -196,8 +193,7 @@ public abstract class TaskManagersTest {
    @Test
    public void checkCreateTasksEmptyListTask() {
        taskManager.deleteAllTasks();
-       int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб"/*,
-                LocalDateTime.of(2023,1,3,12,10), 100*/)).getId();
+       int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб")).getId();
        int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
                LocalDateTime.of(2023,1,4,11,10), 100)).getId();
 
@@ -206,7 +202,7 @@ public abstract class TaskManagersTest {
    }
 
     @Test
-    public void checkUpdateTasksEmptyListTask() { // ?
+    public void checkUpdateTasksEmptyListTask() {
         taskManager.deleteAllTasks();
         int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб",
                 LocalDateTime.of(2023,1,1,12,10), 100)).getId();
@@ -283,7 +279,6 @@ public abstract class TaskManagersTest {
         Assertions.assertEquals("Внеурочная работа", taskManager.getEpicById(numberEpic).getName());
     }
 
-
     @Test
     public void checkStatusCalculationEmptyListTask() {
         taskManager.deleteAllTasks();
@@ -292,7 +287,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         int numberSubTaskSecond = taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         Assertions.assertEquals(Status.NEW.name(), taskManager.getEpicById(numberEpic).getStatus().name());
         Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskFirst).getEpic().getName());
@@ -315,7 +311,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         int numberSubTaskSecond = taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskFirst).getEpic().getName());
         Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskSecond).getEpic().getName());
@@ -329,7 +326,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         int numberSubTaskSecond = taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         taskManager.deleteSubTaskById(numberSubTaskFirst);
         taskManager.deleteSubTaskById(numberSubTaskSecond);
@@ -357,7 +355,6 @@ public abstract class TaskManagersTest {
      * Тесты с неверным идентификатором задачи
      */
 
-
     @Test
     public void checkUpdateTasksInvalidId() {
         taskManager.deleteAllTasks();
@@ -370,7 +367,6 @@ public abstract class TaskManagersTest {
         Assertions.assertEquals("молоко и хлеб", taskManager.getTaskById(numberTask).getDescription());
         Assertions.assertEquals("2023-01-01T12:10", taskManager.getTaskById(numberTask).getStartTime().toString());
         Assertions.assertEquals("2023-01-01T13:50", taskManager.getTaskById(numberTask).getEndTime().toString());
-
     }
 
     @Test
@@ -402,7 +398,6 @@ public abstract class TaskManagersTest {
         taskManager.deleteSubTaskById(10);
 
         Assertions.assertNotNull(taskManager.getSubTaskById(numberSubTask));
-
     }
 
     @Test
@@ -413,7 +408,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic));
         taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic));
         taskManager.deleteEpicById(10);
 

@@ -7,7 +7,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,7 +21,6 @@ public class CSVTaskRepository implements TaskRepository {
     private File file;
     private List<Epic> epics = new ArrayList<>();
     private final static String HEADER_FILE = "id,type,name,status,description,epic,startTime,duration\n";
-
     public CSVTaskRepository(File file) {
         this.file = file;
     }
@@ -110,7 +112,7 @@ public class CSVTaskRepository implements TaskRepository {
             writer.write(HEADER_FILE);
             for (Task task : taskData.getTasks()) {
                 writer.append(taskToLine(task));
-                writer.newLine() ;
+                writer.newLine();
             }
             writer.newLine();
             for (int i = 0; i < taskData.getHistory().size(); i++) {

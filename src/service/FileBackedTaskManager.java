@@ -148,55 +148,55 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
     }
 
     public static void main(String[] args) {
-        TaskManager taskManagerReload = new FileBackedTaskManager(
-                new CSVTaskRepository(new File("./resources/task.csv")));
-
-        taskManagerReload.createTask(new Task("Купить еды", "молоко и хлеб",
-                LocalDateTime.of(2023,1,1,12,10), 100));
-
-        taskManagerReload.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
-                LocalDateTime.of(2023,1,2,11,10), 100));
-        taskManagerReload.createEpic(new Epic("Финальное задание №6", "Сдать задание"));
-        taskManagerReload.createSubTask(new SubTask("Создать классы", "Класс по чтению файла",
-                        LocalDateTime.of(2023,1,3,10,10), 100),
-                taskManagerReload.getEpicById(3));
-        taskManagerReload.createSubTask(new SubTask("Чтение и запись в файл",
-                        "Реализовать методы чтения и записи в файл",
-                LocalDateTime.of(2023,1,4,9,10), 100),
-                taskManagerReload.getEpicById(3));
-        taskManagerReload.createEpic(new Epic("Тестирование", "Протестировать трекер задач"));
-        taskManagerReload.createSubTask(new SubTask("Запись в файл", "Проверить запись в файл",
-                        LocalDateTime.of(2023,1,5,8,10), 100),
-                taskManagerReload.getEpicById(6));
-        taskManagerReload.createSubTask(new SubTask("Чтение из файла", "Проверить чтение из файла",
-                        LocalDateTime.of(2023,1,6,7,10), 100),
-                taskManagerReload.getEpicById(6));
-        System.out.println(taskManagerReload.getTaskById(1));
-        System.out.println(taskManagerReload.getEpicById(3));
-        System.out.println(taskManagerReload.getSubTaskById(8));
-
-        TaskManager taskManager = FileBackedTaskManager.loadFromFile(new File("./resources/task.csv"));
-        System.out.println("Задачи эквивалентны? " + isEqualsTasks(taskManager.getListAllTask(),
-                taskManagerReload.getListAllTask()));
-        System.out.println("Епики эквивалентны? " + isEqualsTasks(taskManager.getListAllEpic(),
-                taskManagerReload.getListAllEpic()));
-        System.out.println("Сабтаски эквивалентны? " + isEqualsTasks(taskManager.getListAllSubTask(),
-                taskManagerReload.getListAllSubTask()));
+//        TaskManager taskManagerReload = new FileBackedTaskManager(
+//                new CSVTaskRepository(new File("./resources/task.csv")));
+//
+//        taskManagerReload.createTask(new Task("Купить еды", "молоко и хлеб",
+//                LocalDateTime.of(2023,1,1,12,10), 100));
+//
+//        taskManagerReload.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+//                LocalDateTime.of(2023,1,2,11,10), 100));
+//        taskManagerReload.createEpic(new Epic("Финальное задание №6", "Сдать задание"));
+//        taskManagerReload.createSubTask(new SubTask("Создать классы", "Класс по чтению файла",
+//                        LocalDateTime.of(2023,1,3,10,10), 100),
+//                taskManagerReload.getEpicById(3));
+//        taskManagerReload.createSubTask(new SubTask("Чтение и запись в файл",
+//                        "Реализовать методы чтения и записи в файл",
+//                LocalDateTime.of(2023,1,4,9,10), 100),
+//                taskManagerReload.getEpicById(3));
+//        taskManagerReload.createEpic(new Epic("Тестирование", "Протестировать трекер задач"));
+//        taskManagerReload.createSubTask(new SubTask("Запись в файл", "Проверить запись в файл",
+//                        LocalDateTime.of(2023,1,5,8,10), 100),
+//                taskManagerReload.getEpicById(6));
+//        taskManagerReload.createSubTask(new SubTask("Чтение из файла", "Проверить чтение из файла",
+//                        LocalDateTime.of(2023,1,6,7,10), 100),
+//                taskManagerReload.getEpicById(6));
+//        System.out.println(taskManagerReload.getTaskById(1));
+//        System.out.println(taskManagerReload.getEpicById(3));
+//        System.out.println(taskManagerReload.getSubTaskById(8));
+//
+//        TaskManager taskManager = FileBackedTaskManager.loadFromFile(new File("./resources/task.csv"));
+//        System.out.println("Задачи эквивалентны? " + isEqualsTasks(taskManager.getListAllTask(),
+//                taskManagerReload.getListAllTask()));
+//        System.out.println("Епики эквивалентны? " + isEqualsTasks(taskManager.getListAllEpic(),
+//                taskManagerReload.getListAllEpic()));
+//        System.out.println("Сабтаски эквивалентны? " + isEqualsTasks(taskManager.getListAllSubTask(),
+//                taskManagerReload.getListAllSubTask()));
     }
 
-    private static boolean isEqualsTasks(List<? extends Task> firstList, List<? extends Task> secondList) {
-        boolean isEquals = true;
-
-        if (firstList != null && secondList != null) {
-            if (firstList.size() == secondList.size()) {
-                for (int i = 0; i < firstList.size(); i++) {
-                    if (!firstList.get(i).equals(secondList.get(i))) {
-                        isEquals = false;
-                        break;
-                    }
-                }
-            }
-        }
-        return isEquals;
-    }
+//    private static boolean isEqualsTasks(List<? extends Task> firstList, List<? extends Task> secondList) {
+//        boolean isEquals = true;
+//
+//        if (firstList != null && secondList != null) {
+//            if (firstList.size() == secondList.size()) {
+//                for (int i = 0; i < firstList.size(); i++) {
+//                    if (!firstList.get(i).equals(secondList.get(i))) {
+//                        isEquals = false;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        return isEquals;
+//    }
 }
