@@ -1,8 +1,6 @@
 package model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,21 +9,17 @@ public class Epic extends Task{
     protected ArrayList<SubTask> insideSubTasks = new ArrayList<>();
     private final TaskType type = TaskType.EPIC;
     private LocalDateTime endTime;
-
     public Epic(String name, String description) {
         super(name, description);
     }
-
     public List<SubTask> getSubTasks() {
         return insideSubTasks;
     }
-
     public void setSubTasks(SubTask subTask) {
         if (subTask != null) {
             this.insideSubTasks.add(subTask);
         }
     }
-
     public void calculateEpicStatus() {
         int countFinishedSubTask = 0;
         for (SubTask insideSubTask : insideSubTasks) {
@@ -43,7 +37,6 @@ public class Epic extends Task{
             setStatus(Status.DONE);
         }
     }
-
     public String getStringSubTasks() {
         String result = "[";
         for (SubTask insideSubTask : insideSubTasks) {
@@ -60,7 +53,6 @@ public class Epic extends Task{
         }
         this.setDuration(sumDuration);
     }
-
     public void calculateEpicStartDate() {
         if (insideSubTasks.size() != 0) {
             LocalDateTime startTime = insideSubTasks.get(0).getStartTime();
@@ -80,10 +72,9 @@ public class Epic extends Task{
             setStartTime(startTime);
         }
     }
-
     public LocalDateTime getEndDate() {
         if (insideSubTasks.size() != 0) {
-            LocalDateTime endTime = insideSubTasks.get(0).getStartTime();
+            endTime = insideSubTasks.get(0).getStartTime();
             for (int i = 1; i < insideSubTasks.size(); i++) {
                 if ((insideSubTasks.get(i).getEndTime() == null && endTime == null) ||
                 insideSubTasks.get(i).getEndTime() == null & endTime != null) {
@@ -101,7 +92,6 @@ public class Epic extends Task{
         }
         return null;
     }
-
     @Override
     public String toString() {
         return "Epic{" +
@@ -116,7 +106,6 @@ public class Epic extends Task{
                 ", endTime='" + this.getEndTime() + '\'' +
                 '}';
     }
-
     @Override
     public TaskType getType() {
         return type;
