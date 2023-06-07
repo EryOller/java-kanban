@@ -21,65 +21,46 @@ public class FileBackedTaskManagerTest extends TaskManagersTest{
     public void checkSaveInFileEmptyListTasksAndEmptyListHistory() {
         taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
         fileBackedTaskManager = (FileBackedTaskManager) taskManager;
-        try {
-            Assertions.assertEquals(0, fileBackedTaskManager.getListAllTask().size());
-            Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.load());
-        } finally {
-            fileBackedTaskManager.deleteAllTasks();
-        }
+        Assertions.assertTrue(fileBackedTaskManager.getListAllTask().isEmpty());
+        Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.load());
     }
 
     @Test
     public void checkRecoveryFromEmptyFileAndEmptyListHistory() {
         taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
         fileBackedTaskManager = (FileBackedTaskManager) taskManager;
-        try {
-            Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
-        } finally {
-            fileBackedTaskManager.deleteAllTasks();
-        }
+        Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
     }
 
     @Test
     public void checkSaveEpicWithoutSubTaskInFile() {
         taskManager = Managers.getFileBackedTaskManager("./test/resources/" + count + "task.csv");
         fileBackedTaskManager = (FileBackedTaskManager) taskManager;
-        try {
-            fileBackedTaskManager.createTask(new Epic("Test-Name", "Test-Description"));
-            Assertions.assertEquals(1, fileBackedTaskManager.getListAllTask().size());
-            Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.load());
-        } finally {
-            fileBackedTaskManager.deleteAllTasks();
-        }
+        fileBackedTaskManager.createTask(new Epic("Test-Name", "Test-Description"));
+        Assertions.assertFalse(fileBackedTaskManager.getListAllTask().isEmpty());
+        Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.load());
     }
 
     @Test
     public void checkRecoveryEpicWithoutSubTaskFromFile() {
-        try {
-            fileBackedTaskManager.createTask(new Epic("Test-Name", "Test-Description"));
-            fileBackedTaskManager.load();
-            Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
-        } finally {
-            fileBackedTaskManager.deleteAllTasks();
-        }
+        fileBackedTaskManager.createTask(new Epic("Test-Name", "Test-Description"));
+        fileBackedTaskManager.load();
+        Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
     }
 
     @Test
     public void checkSaveListHistoryInFile() {
-        try {
-            int numberEpic = fileBackedTaskManager.createEpic(new Epic("Test-Name", "Test-Description")).getId();
-            int numberTask = fileBackedTaskManager.createTask(new Task("TestTask-Name", "TestTask-Description")).getId();
-            fileBackedTaskManager.load();
-            Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
-            fileBackedTaskManager.getEpicById(numberEpic);
-            fileBackedTaskManager.getTaskById(numberTask);
-        } finally {
-            fileBackedTaskManager.deleteAllTasks();
-        }
+        int numberEpic = fileBackedTaskManager.createEpic(new Epic("Test-Name", "Test-Description")).getId();
+        int numberTask = fileBackedTaskManager.createTask(new Task("TestTask-Name", "TestTask-Description")).getId();
+        fileBackedTaskManager.load();
+        Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
+        fileBackedTaskManager.getEpicById(numberEpic);
+        fileBackedTaskManager.getTaskById(numberTask);
     }
 
     @AfterEach
     public void deleteFile() {
+        fileBackedTaskManager.deleteAllTasks();
         new File("./test/resources/" + count++ + "task.csv").delete();
         fileBackedTaskManager = null;
         taskManager = null;

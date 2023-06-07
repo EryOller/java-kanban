@@ -6,21 +6,18 @@ import model.SubTask;
 import model.Task;
 import model.TaskData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static service.InMemoryHistoryManager.clearHistory;
 
 public class InMemoryTaskManager implements TaskManager, TaskRepository {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, SubTask> subTasks =  new HashMap<>();
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, SubTask> subTasks =  new HashMap<>();
     private static int sequence = 0;
     private HistoryManager historyManager =  new InMemoryHistoryManager();
-    private TreeSet<Task> sortedTasks = new TreeSet<>(new TaskComparatorByStartTime());
+    private Set<Task> sortedTasks = new TreeSet<>(new TaskComparatorByStartTime());
 
     @Override
     public Task createTask(Task task) {

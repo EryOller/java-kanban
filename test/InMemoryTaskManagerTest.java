@@ -1,7 +1,5 @@
 import org.junit.jupiter.api.BeforeAll;
-import service.InMemoryTaskManager;
 import service.Managers;
-import service.TaskManager;
 
 public class InMemoryTaskManagerTest extends TaskManagersTest {
 
@@ -9,5 +7,4 @@ public class InMemoryTaskManagerTest extends TaskManagersTest {
     public static void createTaskManager() {
         taskManager = Managers.getDefault();
     }
-
 }
