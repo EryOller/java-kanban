@@ -7,10 +7,10 @@ import java.util.List;
 public class Epic extends Task{
 
     protected ArrayList<SubTask> insideSubTasks = new ArrayList<>();
-    private final TaskType type = TaskType.EPIC;
     private LocalDateTime endTime;
     public Epic(String name, String description) {
         super(name, description);
+        type = TaskType.EPIC;
     }
     public List<SubTask> getSubTasks() {
         return insideSubTasks;
@@ -20,6 +20,7 @@ public class Epic extends Task{
             this.insideSubTasks.add(subTask);
         }
     }
+
     public void calculateEpicStatus() {
         int countFinishedSubTask = 0;
         for (SubTask insideSubTask : insideSubTasks) {

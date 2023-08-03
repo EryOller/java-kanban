@@ -38,4 +38,6 @@ public interface TaskManager {
     void deleteEpicById(int id);
 
     void deleteTaskById(int id);
+
+    List<Task> getPrioritizedTasks();
 }

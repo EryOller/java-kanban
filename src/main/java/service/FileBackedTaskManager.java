@@ -6,20 +6,20 @@ import model.Epic;
 import model.SubTask;
 import model.Task;
 import service.exception.ManagerSaveException;
-
-import java.io.EOFException;
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager{
 
-    private final TaskRepository taskRepository;
+    protected final TaskRepository taskRepository;
 
-    public FileBackedTaskManager( TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public FileBackedTaskManager(String path) {
+        this.taskRepository = new CSVTaskRepository(new File(path));
     }
 
+    public FileBackedTaskManager() {
+        this.taskRepository = new CSVTaskRepository(new File("./resources/task.csv"));
+    }
 
     public void save() {
         try {
@@ -140,16 +140,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
         save();
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) {
-        final FileBackedTaskManager manager = new FileBackedTaskManager(
-                 new CSVTaskRepository(file));
+    public static FileBackedTaskManager loadFromFile(String filePath) throws ManagerSaveException {
+        final FileBackedTaskManager manager = new FileBackedTaskManager(filePath);
         manager.load();
         return manager;
     }
 
     public static void main(String[] args) {
-//        TaskManager taskManagerReload = new FileBackedTaskManager(
-//                new CSVTaskRepository(new File("./resources/task.csv")));
+//        TaskManager taskManagerReload = new FileBackedTaskManager("./resources/task.csv");
 //
 //        taskManagerReload.createTask(new Task("Купить еды", "молоко и хлеб",
 //                LocalDateTime.of(2023,1,1,12,10), 100));

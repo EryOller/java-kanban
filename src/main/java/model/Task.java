@@ -8,7 +8,7 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
-    private final TaskType type = TaskType.TASK;
+    protected TaskType type;
     private LocalDateTime startTime;
     private int duration;
 
@@ -16,6 +16,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        type = TaskType.TASK;
     }
 
     public Task(String name, String description, LocalDateTime startTime, int duration) {
@@ -90,7 +91,6 @@ public class Task {
                 ", id='" + id + '\'' +
                 ", status='" + status + '\'' +
                 ", startTime='" + this.getStartTime() +'\'' +
-                ", duration='" + this.getDuration() + '\'' +
                 ", endTime='" + this.getEndTime() + '\'' +
                 '}';
     }

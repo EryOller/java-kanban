@@ -7,10 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -73,7 +70,7 @@ public class CSVTaskRepository implements TaskRepository {
             SubTask subTask = new SubTask(propertyTask[2], propertyTask[4], LocalDateTime.parse(propertyTask[5]), Integer.parseInt(propertyTask[6]));
             subTask.setId(Integer.parseInt(propertyTask[0]));
             subTask.setStatus(parseStatus(propertyTask[3]));
-            subTask.setEpic(findEpic(propertyTask[5]));
+            subTask.setEpic(findEpic(propertyTask[5]).getId());
             return subTask;
         } else {
             return null;
@@ -132,7 +129,7 @@ public class CSVTaskRepository implements TaskRepository {
                 task.getDescription() + ",");
         if (TaskType.SUBTASK.equals(task.getType())) {
             SubTask subTask = (SubTask) task;
-            line.append(subTask.getEpic().getId());
+            line.append(subTask.getEpic());
         } else {
             line.append("null");
         }

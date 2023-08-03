@@ -3,25 +3,24 @@ package model;
 import java.time.LocalDateTime;
 
 public class SubTask extends Task{
-    protected Epic epic;
-    private final TaskType type = TaskType.SUBTASK;
+    private int epicNumber;
 
     public SubTask(String name, String description) {
         super(name, description);
+        type = TaskType.SUBTASK;
     }
 
     public SubTask(String name, String description, LocalDateTime startDate, int duration) {
         super(name, description, startDate, duration);
+        type = TaskType.SUBTASK;
     }
 
-    public Epic getEpic() {
-        return epic;
+    public int getEpic() {
+        return epicNumber;
     }
 
-    public void setEpic(Epic epic) {
-        if (epic != null) {
-            this.epic = epic;
-        }
+    public void setEpic(int epicNumber) {
+        this.epicNumber = epicNumber;
     }
 
     @Override
@@ -34,7 +33,7 @@ public class SubTask extends Task{
                 ", startTime='" + this.getStartTime() +'\'' +
                 ", duration='" + this.getDuration() + '\'' +
                 ", endTime='" + this.getEndTime() + '\'' +
-                ", epic=" + epic +
+                ", epic=" + epicNumber +
                 '}';
     }
 

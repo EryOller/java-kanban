@@ -18,7 +18,8 @@ public abstract class TaskManagersTest {
     @Test
     public void checkCreateTasksStandardBehavior() {
         int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб")).getId();
-        int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+        int numberSecondTask = taskManager.createTask(
+                new Task("Купить одежду", "Купить в глории серые джинсы",
                 LocalDateTime.of(2023,1,4,11,10), 100)).getId();
 
         Assertions.assertEquals("Купить еды", taskManager.getTaskById(numberFirstTask).getName());
@@ -29,28 +30,37 @@ public abstract class TaskManagersTest {
     public void checkUpdateTasksStandardBehavior() {
         int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб",
                 LocalDateTime.of(2023,1,1,12,10), 100)).getId();
-        int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+        int numberSecondTask = taskManager.createTask(
+                new Task("Купить одежду", "Купить в глории серые джинсы",
                 LocalDateTime.of(2023,1,2,11,10), 100)).getId();
 
          taskManager.updateTask(numberFirstTask, new Task("Купить еды", "молоко, хлеб, колбасу",
                 LocalDateTime.of(2023,1,1,12,0), 30));
-        taskManager.updateTask(numberSecondTask, new Task("Купить одежду", "Купить в глории БЕЛЫЕ джинсы",
+        taskManager.updateTask(numberSecondTask,
+                new Task("Купить одежду", "Купить в глории БЕЛЫЕ джинсы",
                 LocalDateTime.of(2023,1,2,15,10), 60));
 
-        Assertions.assertEquals("молоко, хлеб, колбасу", taskManager.getTaskById(numberFirstTask).getDescription());
-        Assertions.assertEquals("2023-01-01T12:00", taskManager.getTaskById(numberFirstTask).getStartTime().toString());
-        Assertions.assertEquals("2023-01-01T12:30", taskManager.getTaskById(numberFirstTask).getEndTime().toString());
+        Assertions.assertEquals("молоко, хлеб, колбасу",
+                taskManager.getTaskById(numberFirstTask).getDescription());
+        Assertions.assertEquals("2023-01-01T12:00",
+                taskManager.getTaskById(numberFirstTask).getStartTime().toString());
+        Assertions.assertEquals("2023-01-01T12:30",
+                taskManager.getTaskById(numberFirstTask).getEndTime().toString());
 
-        Assertions.assertEquals("Купить в глории БЕЛЫЕ джинсы", taskManager.getTaskById(numberSecondTask).getDescription());
-        Assertions.assertEquals("2023-01-02T15:10", taskManager.getTaskById(numberSecondTask).getStartTime().toString());
-        Assertions.assertEquals("2023-01-02T16:10", taskManager.getTaskById(numberSecondTask).getEndTime().toString());
+        Assertions.assertEquals("Купить в глории БЕЛЫЕ джинсы",
+                taskManager.getTaskById(numberSecondTask).getDescription());
+        Assertions.assertEquals("2023-01-02T15:10",
+                taskManager.getTaskById(numberSecondTask).getStartTime().toString());
+        Assertions.assertEquals("2023-01-02T16:10",
+                taskManager.getTaskById(numberSecondTask).getEndTime().toString());
     }
 
     @Test
     public void checkDeleteTasksStandardBehavior() {
         int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб",
                 LocalDateTime.of(2023,1,5,12,10), 100)).getId();
-        int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+        int numberSecondTask = taskManager.createTask(
+                new Task("Купить одежду", "Купить в глории серые джинсы",
                 LocalDateTime.of(2023,1,6,11,10), 100)).getId();
         taskManager.deleteTaskById(numberFirstTask);
         taskManager.deleteTaskById(numberSecondTask);
@@ -84,7 +94,8 @@ public abstract class TaskManagersTest {
     @Test
     public void checkCreateEpicsStandardBehavior() {
         int numberFirstTask = taskManager.createEpic(new Epic("Работа", "Закрыть прокет №1")).getId();
-        int numberSecondTask = taskManager.createEpic(new Epic("Учеба", "Получение сертификата")).getId();
+        int numberSecondTask = taskManager.createEpic(
+                new Epic("Учеба", "Получение сертификата")).getId();
 
         Assertions.assertEquals("Работа", taskManager.getEpicById(numberFirstTask).getName());
         Assertions.assertEquals("Учеба", taskManager.getEpicById(numberSecondTask).getName());
@@ -93,7 +104,8 @@ public abstract class TaskManagersTest {
     @Test
     public void checkUpdateEpicStandardBehavior() {
         int numberEpic = taskManager.createEpic(new Epic("Работа", "Закрыть прокет №1")).getId();
-        taskManager.updateEpic(numberEpic, new Epic("Внеурочная работа", "Написание тестов по проекту №1"));
+        taskManager.updateEpic(numberEpic,
+                new Epic("Внеурочная работа", "Написание тестов по проекту №1"));
 
         Assertions.assertEquals("Внеурочная работа", taskManager.getEpicById(numberEpic).getName());
     }
@@ -114,11 +126,15 @@ public abstract class TaskManagersTest {
                 "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         int numberSubTaskSecond = taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
-        Assertions.assertEquals(Status.NEW.name(), taskManager.getEpicById(numberEpic).getStatus().name());
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskFirst).getEpic().getName());
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskSecond).getEpic().getName());
+        Assertions.assertEquals(Status.NEW.name(),
+                taskManager.getEpicById(numberEpic).getStatus().name());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskFirst).getEpic()).getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskSecond).getEpic()).getName());
 
         taskManager.getSubTaskById(numberSubTaskFirst).setStatus(Status.DONE);
         taskManager.updateSubTask(numberSubTaskFirst, taskManager.getSubTaskById(numberSubTaskFirst));
@@ -136,10 +152,13 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         int numberSubTaskSecond = taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskFirst).getEpic().getName());
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskSecond).getEpic().getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskFirst).getEpic()).getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskSecond).getEpic()).getName());
     }
 
     @Test
@@ -149,7 +168,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         int numberSubTaskSecond = taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         taskManager.deleteSubTaskById(numberSubTaskFirst);
         taskManager.deleteSubTaskById(numberSubTaskSecond);
@@ -165,7 +185,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         taskManager.deleteEpicById(numberEpic);
 
@@ -180,7 +201,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic));
         taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic));
         Assertions.assertEquals(2, taskManager.getListAllSubTask().size());
     }
@@ -194,7 +216,8 @@ public abstract class TaskManagersTest {
    public void checkCreateTasksEmptyListTask() {
        taskManager.deleteAllTasks();
        int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб")).getId();
-       int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+       int numberSecondTask = taskManager.createTask(
+               new Task("Купить одежду", "Купить в глории серые джинсы",
                LocalDateTime.of(2023,1,4,11,10), 100)).getId();
 
        Assertions.assertEquals("Купить еды", taskManager.getTaskById(numberFirstTask).getName());
@@ -206,21 +229,29 @@ public abstract class TaskManagersTest {
         taskManager.deleteAllTasks();
         int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб",
                 LocalDateTime.of(2023,1,1,12,10), 100)).getId();
-        int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+        int numberSecondTask = taskManager.createTask(
+                new Task("Купить одежду", "Купить в глории серые джинсы",
                 LocalDateTime.of(2023,1,2,11,10), 100)).getId();
 
         taskManager.updateTask(numberFirstTask, new Task("Купить еды", "молоко, хлеб, колбасу",
                 LocalDateTime.of(2023,1,1,12,0), 30));
-        taskManager.updateTask(numberSecondTask, new Task("Купить одежду", "Купить в глории БЕЛЫЕ джинсы",
+        taskManager.updateTask(numberSecondTask,
+                new Task("Купить одежду", "Купить в глории БЕЛЫЕ джинсы",
                 LocalDateTime.of(2023,1,2,15,10), 60));
 
-        Assertions.assertEquals("молоко, хлеб, колбасу", taskManager.getTaskById(numberFirstTask).getDescription());
-        Assertions.assertEquals("2023-01-01T12:00", taskManager.getTaskById(numberFirstTask).getStartTime().toString());
-        Assertions.assertEquals("2023-01-01T12:30", taskManager.getTaskById(numberFirstTask).getEndTime().toString());
+        Assertions.assertEquals("молоко, хлеб, колбасу",
+                taskManager.getTaskById(numberFirstTask).getDescription());
+        Assertions.assertEquals("2023-01-01T12:00",
+                taskManager.getTaskById(numberFirstTask).getStartTime().toString());
+        Assertions.assertEquals("2023-01-01T12:30",
+                taskManager.getTaskById(numberFirstTask).getEndTime().toString());
 
-        Assertions.assertEquals("Купить в глории БЕЛЫЕ джинсы", taskManager.getTaskById(numberSecondTask).getDescription());
-        Assertions.assertEquals("2023-01-02T15:10", taskManager.getTaskById(numberSecondTask).getStartTime().toString());
-        Assertions.assertEquals("2023-01-02T16:10", taskManager.getTaskById(numberSecondTask).getEndTime().toString());
+        Assertions.assertEquals("Купить в глории БЕЛЫЕ джинсы",
+                taskManager.getTaskById(numberSecondTask).getDescription());
+        Assertions.assertEquals("2023-01-02T15:10",
+                taskManager.getTaskById(numberSecondTask).getStartTime().toString());
+        Assertions.assertEquals("2023-01-02T16:10",
+                taskManager.getTaskById(numberSecondTask).getEndTime().toString());
     }
 
     @Test
@@ -228,7 +259,8 @@ public abstract class TaskManagersTest {
         taskManager.deleteAllTasks();
         int numberFirstTask = taskManager.createTask(new Task("Купить еды", "молоко и хлеб",
                 LocalDateTime.of(2023,1,5,12,10), 100)).getId();
-        int numberSecondTask = taskManager.createTask(new Task("Купить одежду", "Купить в глории серые джинсы",
+        int numberSecondTask = taskManager.createTask(new Task("Купить одежду",
+                "Купить в глории серые джинсы",
                 LocalDateTime.of(2023,1,6,11,10), 100)).getId();
         taskManager.deleteTaskById(numberFirstTask);
         taskManager.deleteTaskById(numberSecondTask);
@@ -264,7 +296,8 @@ public abstract class TaskManagersTest {
     public void checkCreateEpicsEmptyListTask() {
         taskManager.deleteAllTasks();
         int numberFirstTask = taskManager.createEpic(new Epic("Работа", "Закрыть прокет №1")).getId();
-        int numberSecondTask = taskManager.createEpic(new Epic("Учеба", "Получение сертификата")).getId();
+        int numberSecondTask = taskManager.createEpic(new Epic("Учеба",
+                "Получение сертификата")).getId();
 
         Assertions.assertEquals("Работа", taskManager.getEpicById(numberFirstTask).getName());
         Assertions.assertEquals("Учеба", taskManager.getEpicById(numberSecondTask).getName());
@@ -274,7 +307,8 @@ public abstract class TaskManagersTest {
     public void checkUpdateEpicEmptyListTask() {
         taskManager.deleteAllTasks();
         int numberEpic = taskManager.createEpic(new Epic("Работа", "Закрыть прокет №1")).getId();
-        taskManager.updateEpic(numberEpic, new Epic("Внеурочная работа", "Написание тестов по проекту №1"));
+        taskManager.updateEpic(numberEpic, new Epic("Внеурочная работа",
+                "Написание тестов по проекту №1"));
 
         Assertions.assertEquals("Внеурочная работа", taskManager.getEpicById(numberEpic).getName());
     }
@@ -291,8 +325,10 @@ public abstract class TaskManagersTest {
                         LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         Assertions.assertEquals(Status.NEW.name(), taskManager.getEpicById(numberEpic).getStatus().name());
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskFirst).getEpic().getName());
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskSecond).getEpic().getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskFirst).getEpic()).getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskSecond).getEpic()).getName());
 
         taskManager.getSubTaskById(numberSubTaskFirst).setStatus(Status.DONE);
         taskManager.updateSubTask(numberSubTaskFirst, taskManager.getSubTaskById(numberSubTaskFirst));
@@ -314,8 +350,10 @@ public abstract class TaskManagersTest {
                         "Реализовать бинарный поиск",
                         LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskFirst).getEpic().getName());
-        Assertions.assertEquals("Работа", taskManager.getSubTaskById(numberSubTaskSecond).getEpic().getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskFirst).getEpic()).getName());
+        Assertions.assertEquals("Работа",
+                taskManager.getEpicById(taskManager.getSubTaskById(numberSubTaskSecond).getEpic()).getName());
     }
 
     @Test
@@ -344,7 +382,8 @@ public abstract class TaskManagersTest {
                         "Определить входные и выходные данные"),
                 taskManager.getEpicById(numberEpic)).getId();
         taskManager.createSubTask(new SubTask("Реализация алгоритма",
-                        "Реализовать бинарный поиск", LocalDateTime.of(2023, 3, 4, 12,0), 60),
+                        "Реализовать бинарный поиск",
+                        LocalDateTime.of(2023, 3, 4, 12,0), 60),
                 taskManager.getEpicById(numberEpic)).getId();
         taskManager.deleteEpicById(numberEpic);
 
@@ -365,8 +404,10 @@ public abstract class TaskManagersTest {
                 LocalDateTime.of(2023,1,1,12,0), 30));
 
         Assertions.assertEquals("молоко и хлеб", taskManager.getTaskById(numberTask).getDescription());
-        Assertions.assertEquals("2023-01-01T12:10", taskManager.getTaskById(numberTask).getStartTime().toString());
-        Assertions.assertEquals("2023-01-01T13:50", taskManager.getTaskById(numberTask).getEndTime().toString());
+        Assertions.assertEquals("2023-01-01T12:10",
+                taskManager.getTaskById(numberTask).getStartTime().toString());
+        Assertions.assertEquals("2023-01-01T13:50",
+                taskManager.getTaskById(numberTask).getEndTime().toString());
     }
 
     @Test

@@ -3,6 +3,7 @@ import model.Task;
 import org.junit.jupiter.api.*;
 import service.FileBackedTaskManager;
 import service.Managers;
+import service.exception.ManagerSaveException;
 
 import java.io.File;
 
@@ -42,14 +43,14 @@ public class FileBackedTaskManagerTest extends TaskManagersTest{
     }
 
     @Test
-    public void checkRecoveryEpicWithoutSubTaskFromFile() {
+    public void checkRecoveryEpicWithoutSubTaskFromFile() throws ManagerSaveException {
         fileBackedTaskManager.createTask(new Epic("Test-Name", "Test-Description"));
         fileBackedTaskManager.load();
         Assertions.assertDoesNotThrow(() -> fileBackedTaskManager.save());
     }
 
     @Test
-    public void checkSaveListHistoryInFile() {
+    public void checkSaveListHistoryInFile() throws ManagerSaveException {
         int numberEpic = fileBackedTaskManager.createEpic(new Epic("Test-Name", "Test-Description")).getId();
         int numberTask = fileBackedTaskManager.createTask(new Task("TestTask-Name", "TestTask-Description")).getId();
         fileBackedTaskManager.load();

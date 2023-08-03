@@ -5,6 +5,7 @@ import model.Epic;
 import model.SubTask;
 import model.Task;
 import model.TaskData;
+import service.exception.ManagerSaveException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,11 +13,11 @@ import java.util.stream.Collectors;
 import static service.InMemoryHistoryManager.clearHistory;
 
 public class InMemoryTaskManager implements TaskManager, TaskRepository {
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
-    private Map<Integer, SubTask> subTasks =  new HashMap<>();
+    protected  Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, SubTask> subTasks =  new HashMap<>();
     private static int sequence = 0;
-    private HistoryManager historyManager =  new InMemoryHistoryManager();
+    protected static HistoryManager historyManager =  new InMemoryHistoryManager();
     private Set<Task> sortedTasks = new TreeSet<>(new TaskComparatorByStartTime());
 
     @Override
@@ -33,7 +34,8 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
     public SubTask createSubTask(SubTask subTask, Epic subTaskOwner) {
         if (epics.containsValue(subTaskOwner) && checkIntersection(subTask, sequence + 1)) {
             subTask.setId(++sequence);
-            subTask.setEpic(subTaskOwner);
+            //subTask.setEpic(subTaskOwner);
+            subTask.setEpic(subTaskOwner.getId());
             subTaskOwner.setSubTasks(subTask);
             subTasks.put(subTask.getId(), subTask);
             sortedTasks.add(subTask);
@@ -73,6 +75,7 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
         subTasks.clear();
         sortedTasks.clear();
         clearHistory();
+        sequence = 0;
     }
 
     @Override
@@ -124,7 +127,7 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
             saved.setName(subTask.getName());
             saved.setStatus(subTask.getStatus());
             saved.setDescription(subTask.getDescription());
-            Epic epic = subTask.getEpic();
+            Epic epic = epics.get(subTask.getEpic());
             epic.calculateEpicStatus();
             epic.calculateEpicDuration();
             epic.calculateEpicStartDate();
@@ -136,7 +139,7 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
     public void deleteSubTaskById(int id) {
         if (subTasks.containsKey(id)) {
             deleteTaskInSortedTasks(id);
-            Epic currentEpic = subTasks.get(id).getEpic();
+            Epic currentEpic = epics.get(subTasks.get(id).getEpic());
             for (int i = 0; i < currentEpic.getSubTasks().size(); i++) {
                 if (currentEpic.getSubTasks().get(i).getId() == id) {
                     currentEpic.getSubTasks().remove(i);
@@ -177,16 +180,16 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
         }
     }
 
-    private void saveTaskInHistory(Task task) {
+    protected void saveTaskInHistory(Task task) {
         historyManager.add(task);
     }
 
-    private List<Task> getListHistory() {
+    protected List<Task> getListHistory() {
         return historyManager.getHistory();
     }
 
     @Override
-    public TaskData load() { // загрузить в файла
+    public TaskData load() throws ManagerSaveException { // загрузить в файла
         List<Task> tasks = new ArrayList<>();
         tasks.addAll(this.tasks.values());
         tasks.addAll(this.epics.values());
@@ -202,20 +205,22 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
     }
 
     @Override
-    public void save(TaskData taskData) { // сохранить из файл
+    public void save(TaskData taskData) throws ManagerSaveException { // сохранить из файл
+        Task task;
         try {
-            for (Task task : taskData.getTasks()) {
+            for (int i = 0; i < taskData.getTasks().size(); i++) {
+                task = taskData.getTasks().get(i);
                 switch (task.getType()) {
                     case TASK : {
                         tasks.put(task.getId(), task);
                         break;
                     }
                     case EPIC: {
-                        epics.put(task.getId(), (Epic) task);
+                        epics.put(task.getId(), (Epic)task);
                         break;
                     }
                     case SUBTASK: {
-                        subTasks.put(task.getId(), (SubTask) task);
+                        subTasks.put(task.getId(), (SubTask)task);
                         break;
                     }
                     default: {
@@ -226,8 +231,10 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
-        sequence = taskData.getTasks().stream().max(new TaskComparator()).get().getId();
+
+        if (taskData.getTasks().size() != 0) {
+            sequence = taskData.getTasks().stream().max(new TaskComparator()).get().getId();
+        }
 
         for (int id : taskData.getHistory()) {
             if (tasks.get(id) != null) {
@@ -239,7 +246,7 @@ public class InMemoryTaskManager implements TaskManager, TaskRepository {
             }
         }
     }
-
+    @Override
     public List<Task> getPrioritizedTasks() {
         return sortedTasks.stream().collect(Collectors.toUnmodifiableList());
     }

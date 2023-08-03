@@ -4,6 +4,7 @@ import model.SubTask;
 import org.junit.jupiter.api.*;
 import service.Managers;
 import service.TaskManager;
+import service.exception.ManagerSaveException;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ public class EpicTest {
     public static TaskManager inMemoryTaskManager;
 
     @BeforeAll
-    public static void createInMemoryTaskManager() {
+    public static void createInMemoryTaskManager() throws ManagerSaveException {
         inMemoryTaskManager = Managers.getDefault();
     }
 
